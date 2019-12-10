@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace discret_matem
 {
@@ -15,6 +16,7 @@ namespace discret_matem
             while (isOpen)
             {
                 string read = "";
+                Console.Write("Пример значения:\r\n'1001',\r\n'1 0 0 1'\r\nВведите значение: ");
                 read = Console.ReadLine();
                 read = Remove_trash(read,'1','0');
 
@@ -31,15 +33,46 @@ namespace discret_matem
 
                 for(int i = 0; i < l; i++)
                 {
-                    Console.Write(Line(i, n));
-                    Console.Write(Space + read[i]);
-                    Console.Write(Space + SKNF_value(Line(i,n) + read[i]));
-                    Console.Write(Space + SDNF_value(Line(i, n) + read[i]));
-                    Console.WriteLine("");
+                    Console.WriteLine(Line(i, n) + Space + read[i] + Space + SKNF_value(Line(i, n) + read[i]) + Space + SDNF_value(Line(i, n) + read[i]));
                 }
 
                 Console.WriteLine("SKNF: " + SKNF_result(read));
                 Console.WriteLine("SDNF: " + SDNF_result(read));
+
+                Console.WriteLine("\r\n закрыть программу? \r\n нажмите Y/N");
+
+                ConsoleKey key = ConsoleKey.Escape;
+                int c = 0;
+                while (true)
+                {
+                    key = Console.ReadKey().Key;
+                    if (key == ConsoleKey.Y) { isOpen = false; break; }
+                    else if (key == ConsoleKey.N) { Console.Clear(); break; }
+                    else
+                    {
+                        switch (c)
+                        {
+                            case 0:
+                                Console.WriteLine("\r\nнажмите 'Y' или 'N'");
+                                break;
+                            case 1:
+                                Console.WriteLine("\r\nсложно попасть по нужной кнопке?!");
+                                break;
+                            case 2:
+                                Console.WriteLine("\r\nты издеваешься надо мной?!");
+                                break;
+                            case 3:
+                                Console.WriteLine("\r\nэто начинает надоедать...");
+                                break;
+                            case 4:
+                                Console.WriteLine("\r\nой всё!");
+                                Thread.Sleep(600);
+                                break;
+                        }
+                        if (c == 4) { isOpen = false; break; }
+                        c++;
+                    }
+                }
             }
         }
 
@@ -53,13 +86,12 @@ namespace discret_matem
             return r;
         }
 
-        static string format(string text, int length, char space = ' ', bool LeftOrRight = true)
+        static string format(string text, int length, char space = ' ')
         {
             string r = text;
             while (r.Length < length)
             {
-                if (LeftOrRight) r = space + r;
-                else r = r + space;
+                r = space + r;
             }
             return r;
         }
@@ -86,7 +118,7 @@ namespace discret_matem
                     if (i < value.Length - 2) r += SKNF_simbol;
                 }
             }
-            if (space_active) r = format(r, value.Length * 2);
+            if (space_active) r = format(r, value.Length * 3 - 4);
             return r;
         }
 
@@ -117,7 +149,7 @@ namespace discret_matem
                     if (i < value.Length - 2) r += SDNF_simbol;
                 }
             }
-            if (space_active) r = format(r, value.Length * 2);
+            if (space_active) r = format(r, value.Length * 3 - 4);
             return r;
         }
 
