@@ -7,6 +7,7 @@ namespace discret_matem
     {
         const char SKNF_simbol = 'v';
         const char SDNF_simbol = '^';
+        const string Space = "   ";
 
         static void Main(string[] args)
         {
@@ -26,17 +27,19 @@ namespace discret_matem
                 int l = read.Length;
                 int n = Exp(l, 2);
 
+                Console.WriteLine(main_text(n));
+
                 for(int i = 0; i < l; i++)
                 {
                     Console.Write(Line(i, n));
-                    Console.Write("  " + read[i]);
-                    Console.Write("  " + SKNF_value(Line(i,n) + read[i]));
-                    Console.Write("  " + SDNF_value(Line(i, n) + read[i]));
+                    Console.Write(Space + read[i]);
+                    Console.Write(Space + SKNF_value(Line(i,n) + read[i]));
+                    Console.Write(Space + SDNF_value(Line(i, n) + read[i]));
                     Console.WriteLine("");
                 }
 
-                Console.WriteLine(SKNF_result(read));
-                Console.WriteLine(SDNF_result(read));
+                Console.WriteLine("SKNF: " + SKNF_result(read));
+                Console.WriteLine("SDNF: " + SDNF_result(read));
             }
         }
 
@@ -47,6 +50,28 @@ namespace discret_matem
             {
                 r = "0" + r;
             }
+            return r;
+        }
+
+        static string format(string text, int length, char space = ' ', bool LeftOrRight = true)
+        {
+            string r = text;
+            while (r.Length < length)
+            {
+                if (LeftOrRight) r = space + r;
+                else r = r + space;
+            }
+            return r;
+        }
+
+        static string main_text(int n)
+        {
+            string r = "";
+            for (int i = 0; i < n; i++)
+            {
+                r += ((char)(65 + i)).ToString();
+            }
+            r += Space + "N" + Space + format("SKNF", n * 2 + n - 1) + Space + format("SDNF", n * 2 + n - 1);
             return r;
         }
 
@@ -61,10 +86,7 @@ namespace discret_matem
                     if (i < value.Length - 2) r += SKNF_simbol;
                 }
             }
-            if(space_active) while (r.Length < value.Length*2-1)
-            {
-                r = " " + r;
-            }
+            if (space_active) r = format(r, value.Length * 2);
             return r;
         }
 
@@ -95,10 +117,7 @@ namespace discret_matem
                     if (i < value.Length - 2) r += SDNF_simbol;
                 }
             }
-            if (space_active) while (r.Length < value.Length * 2 - 1)
-            {
-                r = " " + r;
-            }
+            if (space_active) r = format(r, value.Length * 2);
             return r;
         }
 
